@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
         userName: "",
         password: "",
     })
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -32,8 +34,10 @@ const Login = () => {
                 toast.success("Logged In");
                 navigate('/')
             }
+            console.log(res.data.data.userCheck)
+            // dispatch(setUserData(res.data.data.userCheck))
         } catch (error) {
-            console.log(error.response)
+            // console.log(error.response)
             toast.error(error.response.data.message)
         }
 
