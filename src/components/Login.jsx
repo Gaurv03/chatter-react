@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
+import { setAuthUser } from '../redux/userSlice';
 
 const Login = () => {
 
@@ -32,12 +33,10 @@ const Login = () => {
             })
             if (res.data.code === 200) {
                 toast.success("Logged In");
-                navigate('/')
+                navigate('/home')
             }
-            console.log(res.data.data.userCheck)
-            // dispatch(setUserData(res.data.data.userCheck))
+            dispatch(setAuthUser(res.data.data.userCheck))
         } catch (error) {
-            // console.log(error.response)
             toast.error(error.response.data.message)
         }
 

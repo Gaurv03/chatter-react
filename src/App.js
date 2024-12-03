@@ -6,13 +6,16 @@ import Homepage from './components/Homepage';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/home",
     element: <Homepage></Homepage>
   }, {
     path: "/register",
     element: < Signup />
   }, {
     path: "/login",
+    element: <Login />
+  }, {
+    path: "/",
     element: <Login />
   }
 ])
