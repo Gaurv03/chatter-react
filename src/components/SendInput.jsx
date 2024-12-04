@@ -14,7 +14,6 @@ const SendInput = () => {
     const [msg, setMsg] = useState("")
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        console.log(message)
         try {
             const res = await axios.post(`http://localhost:8080/api/message/send/${selectedUser?._id}`, { message: msg }, {
                 headers: {
@@ -22,11 +21,8 @@ const SendInput = () => {
                 },
                 withCredentials: true
             })
-            if (message) {
-                dispatch(setMessage([...message, res?.data?.data?.msg]))
-            } else {
-                dispatch(setMessage([res?.data?.data?.msg]))
-            }
+            dispatch(setMessage([...message, res?.data?.data?.msg]))
+
         } catch (error) {
             console.log(error)
         }

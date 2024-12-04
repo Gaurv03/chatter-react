@@ -7,11 +7,12 @@ const OtherUser = ({ user }) => {
     const selectedUserHandler = () => {
         dispatch(setSelectedUser(user))
     }
-    const { selectedUser } = useSelector(store => store.user)
+    const { selectedUser, onlineUsers } = useSelector(store => store.user)
+    const isOnline = onlineUsers?.includes(user._id) ? "online" : "offline";
     return (
         <>
             <div className={ `${selectedUser?._id === user?._id ? 'bg-zinc-300 text-black rounded' : ''} flex gap-3 p-1 items-center cursor-pointer py-2` } onClick={ () => selectedUserHandler(user) }>
-                <div className='avatar online'>
+                <div className={ `avatar ${isOnline}` }>
                     <div className='w-12 rounded-full  '>
                         <img src={ user?.profilePic } alt="" />
                     </div>
