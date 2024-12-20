@@ -6,7 +6,7 @@ import { setMessage } from '../redux/messageSlice';
 
 const SendInput = () => {
 
-    const { selectedUser } = useSelector(store => store.user)
+    const { selectedUser, authUser } = useSelector(store => store.user)
     const { message } = useSelector(store => store.message)
 
     const dispatch = useDispatch()
@@ -29,6 +29,22 @@ const SendInput = () => {
         setMsg("")
     }
 
+    const { socket } = useSelector(store => store.socket);
+    let userTyping = false;
+    let timeout = undefined;
+    const typingTimeout = () => {
+        userTyping = false;
+        socket.emit('typing', { user: authUser.userName, id: authUser._id, typing: false })
+        clearTimeout(timeout)
+    }
+    const onChangeHandler = (e) => {
+        setMsg(e.target.value)
+        userTyping = true;
+        socket.emit('typing', { user: authUser.userName, id: authUser._id, typing: userTyping })
+        clearTimeout(timeout)
+        timeout = setTimeout(typingTimeout, 2000)
+    }
+
     return (
         <form className='px-4 my-3' onSubmit={ onSubmitHandler }>
             <div className='w-full relative'>
@@ -36,7 +52,7 @@ const SendInput = () => {
                     type="text"
                     placeholder='Send a message...'
                     value={ msg }
-                    onChange={ e => setMsg(e.target.value) }
+                    onChange={ onChangeHandler }
                     className='focus:border-transparent rounded-lg block w-full bg-gray-600 p-2'
                 />
 

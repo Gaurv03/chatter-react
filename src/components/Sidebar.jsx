@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuthUser } from '../redux/userSlice';
+import { setAuthUser, setSelectedUser } from '../redux/userSlice';
 
 const Sidebar = () => {
 
@@ -22,6 +22,7 @@ const Sidebar = () => {
             const res = await axios.post('http://localhost:8080/api/users/logout');
             toast.success(res.data.data)
             dispatch(setAuthUser(null))
+            dispatch(setSelectedUser(null))
             navigate('/login', { replace: true });
         } catch (error) {
             console.log(error)

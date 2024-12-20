@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SendInput from './SendInput'
 import Messages from './Messages'
 import { setSelectedUser } from '../redux/userSlice';
@@ -10,12 +10,23 @@ const MessageContainer = () => {
 
     const isOnline = onlineUsers?.includes(selectedUser?._id) ? "online" : "offline";
 
-    // To not persist selected user uncomment this 
+    // To not persist selected user uncomment this
     // useEffect(() => {
     //     return () => {
     //         dispatch(setSelectedUser(null))
     //     }
     // }, [dispatch])
+    const { socket } = useSelector(store => store.socket);
+    const [userTyping, setUserTyping] = useState({})
+
+    useEffect(() => {
+        socket?.on('display', (data) => {
+            setUserTyping(data);
+        })
+        return () => {
+            socket?.off('display');
+        };
+    }, [socket]);
 
     return (
         <>
@@ -32,6 +43,11 @@ const MessageContainer = () => {
                                 <div className='font-bold flex justify-between gap-2'>
                                     <p>{ selectedUser?.fullName }</p>
                                 </div>
+                                {
+                                    userTyping?.id === selectedUser?._id &&
+                                        userTyping?.typing ?
+                                        <span>typing...</span> : ""
+                                }
                             </div>
                         </div>
                         <Messages />
